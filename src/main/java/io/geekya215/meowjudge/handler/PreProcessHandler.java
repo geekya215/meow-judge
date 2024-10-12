@@ -4,6 +4,7 @@ import io.geekya215.meowjudge.JudgeContext;
 import io.geekya215.meowjudge.JudgeRequest;
 import io.geekya215.meowjudge.Language;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public final class PreProcessHandler extends Handler {
     private static final String BASE_JUDGE_DIRECTORY = "/tmp";
     private static final Map<Language, String> sourcecodeFileNames = new HashMap<>();

@@ -7,11 +7,14 @@ import com.github.dockerjava.core.InvocationBuilder;
 import io.geekya215.meowjudge.JudgeContext;
 import io.geekya215.meowjudge.Verdict;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public abstract class AbstractCompiler implements Compilable {
     private static final String WORKING_DIRECTORY = "/usr/src";
+    private static final Logger log = LoggerFactory.getLogger(AbstractCompiler.class);
 
     @Override
     public boolean compile(@NotNull final JudgeContext ctx, @NotNull final DockerClient dockerClient) {
@@ -34,6 +37,9 @@ public abstract class AbstractCompiler implements Compilable {
 
         final String containerId = response.getId();
 
+        log.info("Compiling {} arguments", args);
+        dockerClient.startContainerCmd(containerId).exec();
+
         // Todo
         // use Ref
         final boolean[] compileResult = {true};
@@ -48,20 +54,22 @@ public abstract class AbstractCompiler implements Compilable {
                        @Override
                        public void onNext(Frame object) {
                            if (object.getStreamType() == StreamType.STDERR) {
-                               System.out.println(object);
+                               // Todo
+                               // record compile information
                                compileResult[0] = false;
                            }
                        }
                    })
                    .awaitCompletion();
 
-            dockerClient.startContainerCmd(containerId).exec();
         } catch (InterruptedException e) {
             compileResult[0] = false;
         }
+
         if (!compileResult[0]) {
             ctx.setVerdict(Verdict.COMPILE_ERROR);
         }
+
         return compileResult[0];
     }
 

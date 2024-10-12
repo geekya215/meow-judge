@@ -16,13 +16,15 @@ public final class JudgeContext {
     private @Nullable String executablePath;
     private @NotNull final Map<@NotNull Integer, @NotNull String> inputs;
     private @NotNull final Map<@NotNull Integer, @NotNull String> outputs;
+    private @NotNull final Map<@NotNull Integer, @NotNull String> answers;
 
     public JudgeContext(@NotNull final JudgeRequest judgeRequest,
                         @NotNull final Integer timeLimit,
                         @NotNull final Integer memoryLimit,
                         @NotNull Verdict verdict,
                         @NotNull final Map<@NotNull Integer, @NotNull String> inputs,
-                        @NotNull final Map<@NotNull Integer, @NotNull String> outputs
+                        @NotNull final Map<@NotNull Integer, @NotNull String> outputs,
+                        @NotNull final Map<@NotNull Integer, @NotNull String> answers
     ) {
         this.judgeRequest = judgeRequest;
         this.timeLimit = timeLimit;
@@ -30,13 +32,15 @@ public final class JudgeContext {
         this.verdict = verdict;
         this.inputs = inputs;
         this.outputs = outputs;
+        this.answers = answers;
     }
 
     public JudgeContext(@NotNull final JudgeRequest judgeRequest,
                         @NotNull final Integer timeLimit,
-                        @NotNull final Integer memoryLimit
+                        @NotNull final Integer memoryLimit,
+                        @NotNull final Map<@NotNull Integer, @NotNull String> answers
     ) {
-        this(judgeRequest, timeLimit, memoryLimit, Verdict.WAITING, new HashMap<>(), new HashMap<>());
+        this(judgeRequest, timeLimit, memoryLimit, Verdict.WAITING, new HashMap<>(), new HashMap<>(), answers);
     }
 
     public @NotNull JudgeRequest getJudgeRequest() {
@@ -89,5 +93,9 @@ public final class JudgeContext {
 
     public @NotNull Map<@NotNull Integer, @NotNull String> getOutputs() {
         return outputs;
+    }
+
+    public @NotNull Map<@NotNull Integer, @NotNull String> getAnswers() {
+        return answers;
     }
 }

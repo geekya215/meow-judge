@@ -3,20 +3,18 @@ package io.geekya215.meowjudge.handler;
 import io.geekya215.meowjudge.JudgeContext;
 import io.geekya215.meowjudge.Verdict;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 
+@Component
 public final class ValidateHandler extends Handler {
-    private final Map<@NotNull Integer, @NotNull String> answers;
-
-    public ValidateHandler(final Map<@NotNull Integer, @NotNull String> answers) {
-        this.answers = answers;
-    }
 
     @Override
     public void handle(@NotNull JudgeContext ctx) throws IOException {
         final Map<@NotNull Integer, @NotNull String> outputs = ctx.getOutputs();
+        final Map<@NotNull Integer, @NotNull String> answers = ctx.getAnswers();
 
         boolean valid = answers.keySet().stream().allMatch(a -> answers.get(a).equals(outputs.get(a)));
 
